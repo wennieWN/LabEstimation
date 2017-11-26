@@ -160,12 +160,11 @@
       <el-row></el-row>
       <el-row type="flex" class="row-bg" justify="space-between">
         <el-col :span="6"><div class="grid-content bg-white"></div></el-col>
-        <!--<el-col :span="6">
+       <el-col :span="6">
           <div class="grid-content bg-white">
-             <el-button type="primary" @click="Prev">Prev</el-button>
-             <el-button type="primary" @click="Next">Next</el-button>
+             <el-button  @click="Next">保存</el-button>
           </div>
-        </el-col>-->
+        </el-col>
         <el-col :span="6"><div class="grid-content bg-white"></div></el-col>
       </el-row>
     </div>
@@ -195,25 +194,6 @@
       Body_CheckIFPUGFactor
     },
       methods: {
-          Prev() {
-              this.$confirm('返回前页将不会保存当前内容, 是否继续?', '提示', {
-                  confirmButtonText: '确定',
-                  cancelButtonText: '取消',
-                  type: 'warning',
-                  center: true
-              }).then(() => {
-                  this.$router.push({path:'/managersteptwo'})
-                  this.$message({
-                      type: 'success',
-                      message: '返回前页!'
-                  });
-              }).catch(() => {
-                  this.$message({
-                      type: 'info',
-                      message: '已取消操作'
-                  });
-              });
-          },
           Next() {
 //            console.log(global_.ID);
               var trans = {
@@ -228,20 +208,21 @@
                   "productivity": this.tProductivity,
                   "cost": this.tLabor
               };
-              console.log(trans);
+             // console.log(Body_CheckIFPUGFactor.dialogVisible);
               this.$confirm('是否提交当前信息, 进入下一步骤?', '提示', {
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
                   type: 'warning',
                   center: true
               }).then(() => {
-                this.$router.push({path:'/managersteptwo'})
-//                  this.$http.post('http://192.168.1.122:8011/estimation/addVAF/' + global_.ID, trans).then(response => {
-//                      this.$message({
-//                          type: 'success',
-//                          message: '已提交当前信息!'
-//                      });
-//                  })
+                 this.$http.post('http://192.168.1.122:8011/estimation/addVAF/' + global_.ID, trans).then(response => {
+                     Body_CheckIFPUGFactor.dialogVisible=false;
+                     console.log(Body_CheckIFPUGFactor.dialogVisible);
+                      this.$message({
+                          type: 'success',
+                          message: '已提交当前信息!'
+                      });
+                 })
               }).catch(() => {
                   this.$message({
                       type: 'info',
@@ -249,40 +230,8 @@
                   });
               });
           },
-
-//        Next() {
-//            var trans={
-//                "developmentType": this.tType,
-//                "developmentPlatform": this.tPlatform,
-//                "languageType": this.tLanguage,
-//                "DBMS_Used": Boolean(this.tDB),
-//                "RELY": this.tReliability,
-//                "CPLX": this.tComplexity,
-//                "TIME": this.tTime,
-//                "SCED": this.tSchedule,
-//                "productivity": this.tProductivity,
-//                "cost": this.tLabor
-//            }
-//            this.$confirm('是否提交当前信息, 进入下一步骤?', '提示', {
-//                confirmButtonText: '确定',
-//                cancelButtonText: '取消',
-//                type: 'warning',
-//                center: true
-//            }).then(() => {
-//                console.log(trans);
-//                this.$message({
-//                    type: 'success',
-//                    message: '已提交当前信息!'
-//                });
-//            }).catch(() => {
-//                this.$message({
-//                    type: 'info',
-//                    message: '已取消操作'
-//                });
-//            });
-//        }
     },
-          data() {
+      data() {
               return {
 
                   tType: '', tPlatform: '', tLanguage: '', tDB: '',
@@ -360,10 +309,27 @@
                   }],
                   tSchedule: 1,
 
-                  tProductivity: 1,
+                  tProductivity:1,
                   tLabor: 1
               };
-          }
+          },
+      mounted(){
+          this.$http.get('http://192.168.1.122:8011/estimation/getRequirement/'+global_.ID).then(res=>{
+              console.log(res.body.vaf);
+              this.tType = res.body.vaf.developmentType
+              this.tPlatform = res.body.vaf.developmentPlatform
+              this.tLanguage = res.body.vaf.languageType
+              this.tDB = res.body.vaf.dbms_Used
+              this.tReliability = res.body.vaf.rely
+              this.tComplexity = res.body.vaf.cplx
+              this.tTime = res.body.vaf.time
+              this.tSchedule = res.body.vaf.sced
+              this.tProductivity = res.body.vaf.productivity
+              this.tLabor = res.body.vaf.cost
+          },res=>{
+              console.log('fail');
+          })
+      }
       }
 </script>
 
