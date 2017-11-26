@@ -3,12 +3,12 @@
     <div class="container-list">
       <div class="filter">
         <div class="quick-search" >
-          <input type="text" placeholder="search"  class="quick-search">
-        </div>
-        <div class="create">
-          <el-button  type="primary"  @click="goCreate" >创建估算 <i class="el-icon-plus"></i></el-button>
+          <input type="text" placeholder="请输入搜索内容"  @input="search" class="quick-search">
         </div>
 
+        <div class="create" style="width: 200px">
+          <el-button  type="primary"  @click="goCreate" >创建估算 <i class="el-icon-plus"></i></el-button>
+        </div>
       </div>
       <div class="box">
         <div class="table">
@@ -80,9 +80,10 @@
       },
       modify(index){
         var s="待修改";
+        var e="待审核"
         var est=[];
         est = this.tableData4[index].state;
-        if(est == s)
+        if(est == s|| est==e )
         {
           global_.ID = this.tableData4[index].rId
           console.log(global_.ID)
@@ -101,53 +102,46 @@
           })
         }
       },
-      /*setSlist(arr) {
-        this.slist = JSON.parse(JSON.stringify(arr));
-      },
-      search(e,index) {
-        var v = e.target.value,
-          self = this;
-        self.searchlist = [];
-        var estmation=[];
-        this.form=this.tableData4[index];
-        if (v) {
-          var ss = [];
-          // 过滤需要的数据
-          this.tableData4.forEach(function () {
-            if (this.form.state.indexOf(v) > -1) {
-              if (self.searchlist.indexOf(this.form.state) == -1) {
-                self.searchlist.push(this.form.state);
-              }
-              ss.push(this.form);
-            } else if (this.form.proName.indexOf(v) > -1) {
-              if (self.searchlist.indexOf(this.form.proName) == -1) {
-                self.searchlist.push(this.form.proName);
-              }
-              ss.push(this.form);
+      search(e) {
+          this.tableData4.length = 0;
+          var v = new RegExp(e.target.value);
+          for(var j=0;j<this.allData.length;j++){
+            if(v.test(this.allData[j].proName)||
+                v.test(this.allData[j].proIntro)||
+                v.test(this.allData[j].state)||
+                v.test(this.allData[j].method)){
+                var temp = {
+                    "rId" : '',
+                    "proName" : '',
+                    "proIntro" : '',
+                    "createTime" : '',
+                    "state" : '',
+                    "method" : '',
+                    "remark" : ''
+                }
+                temp.rId = this.allData[j].rId;
+                temp.proName=this.allData[j].proName;
+                temp.proIntro = this.allData[j].proIntro;
+                temp.createTime = this.allData[j].createTime;
+                temp.state = this.allData[j].state;
+                temp.method = this.allData[j].method;
+                temp.remark = this.allData[j].remark;
+                this.tableData4.push(temp);
             }
-            else if (this.form.method.indexOf(v) > -1) {
-              if (self.searchlist.indexOf(this.form.method) == -1) {
-                self.searchlist.push(this.form.method);
-              }
-              ss.push(this.form);
-            }
-          });
-          this.setSlist(ss); // 将过滤后的数据给了slist
-        } else {
-          // 没有搜索内容，则展示全部数据
-          this.setSlist(this.tableData4);
-        }
-      }*/
+            console.log(v.test(this.allData[j].proName))
+
+          }
+
+      }
     },
     data() {
       return {
         tableData4: [],
+          allData: []
       }
     },
     mounted() {
       this.$http.get('http://192.168.1.122:8011/estimation/getAllRequirements').then(res=>{
-
-
           for(var i = 0; i < res.body.length; i++){
             var temp = {
               "rId" : '',
@@ -166,13 +160,13 @@
             temp.method = res.body[i].description.estimationMethod;
             temp.remark = res.body[i].remark;
             this.tableData4.push(temp);
+            this.allData.push(temp);
           }
           console.log(this.tableData4)
         },res=>{
           console.log('fail');
-        }
-      )
-    },
+        })
+    }
   }
 
 </script>
@@ -193,12 +187,16 @@
   }
   .container-list.filter{
     width: 100%;
+    height: 70px;
     border: solid rgba(71, 72, 69, 0.4) 1px;
     margin: auto;
   }
   .container-list .filter .quick-search {
-    width: 200px;
-    border: solid rgba(71, 72, 69, 0.4) 1px; }
+    width: 250px;
+    height: 40px;
+    border: solid rgba(71, 72, 69, 0.4) 1px;
+  display: flex;
+  float:left}
   .container-list .filter .quick-search input {
     color: #474845; }
   .container-list .filter .quick-search input::placeholder {
@@ -251,7 +249,9 @@
     width: 90%;
   }
   .create{
-    margin-top: 8px;
+    margin-top:13px;
+    display: flex;
+    float: right;
   }
 
 </style>

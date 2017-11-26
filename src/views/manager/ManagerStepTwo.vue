@@ -24,8 +24,6 @@
     import Body_CheckIFPUGFactor from "../../components/estimation/Body_CheckIFPUGFactor"
     import global_ from "../../Global.vue"
 
-    global_.ID='321'
-
     export default {
         name: "ManagerStepTwo",
         components: {

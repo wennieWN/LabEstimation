@@ -161,6 +161,23 @@
          Body_EditIFPUGFactor
        },
         methods: {
+            init(){
+                this.$http.get('http://192.168.1.122:8011/estimation/getRequirement/'+global_.ID).then(res=>{
+                    console.log(res.body.vaf);
+                    this.tType = res.body.vaf.developmentType
+                    this.tPlatform = res.body.vaf.developmentPlatform
+                    this.tLanguage = res.body.vaf.languageType
+                    this.tDB = res.body.vaf.dbms_Used
+                    this.tReliability = res.body.vaf.rely
+                    this.tComplexity = res.body.vaf.cplx
+                    this.tTime = res.body.vaf.time
+                    this.tSchedule = res.body.vaf.sced
+                    this.tProductivity = res.body.vaf.productivity
+                    this.tLabor = res.body.vaf.cost
+                },res=>{
+                    console.log('fail');
+                })
+            },
           close() {
             this.$confirm('返回前页将不会保存当前内容, 是否继续?', '提示', {
               confirmButtonText: '确定',
@@ -181,39 +198,8 @@
             });
           },
           submit() {
-//            console.log(global_.ID);
-            var trans = {
-              "developmentType": this.tType,
-              "developmentPlatform": this.tPlatform,
-              "languageType": this.tLanguage,
-              "DBMS_Used": Boolean(this.tDB),
-              "RELY": this.tReliability,
-              "CPLX": this.tComplexity,
-              "TIME": this.tTime,
-              "SCED": this.tSchedule,
-              "productivity": this.tProductivity,
-              "cost": this.tLabor
-            };
-            console.log(trans);
-            this.$confirm('是否提交当前信息, 进入下一步骤?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning',
-              center: true
-            }).then(() => {
-              this.dialogVisible=false
-//                  this.$http.post('http://192.168.1.122:8011/estimation/addVAF/' + global_.ID, trans).then(response => {
-                     this.$message({
-                       type: 'success',
-                         message: '已提交当前信息!'
-                    });
-//                  })
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消操作'
-              });
-            });
+              this.init();
+              this.dialogVisible=false;
           },
           handleClose(done) {
             this.$confirm('确认关闭？')
@@ -276,6 +262,9 @@
                 },
                 formLabelWidth: '120px'
             };
+        },
+        mounted(){
+            this.init();
         }
     }
 </script>
