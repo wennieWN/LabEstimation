@@ -9,6 +9,42 @@
           <el-button  type="primary"  @click="goCreate" >创建估算 <i class="el-icon-plus"></i></el-button>
         </div>
 
+        <!--<div class="block">-->
+          <!--<span class="demonstration">使用 value-format 进行格式化</span>-->
+          <!--<div class="demonstration">组件值：{{ value11 }}</div>-->
+        <!--<el-date-picker-->
+                <!--v-model="value11"-->
+                <!--type="date"-->
+                <!--placeholder="选择日期"-->
+                <!--format="yyyy 年 MM 月 dd 日"-->
+                <!--value-format="yyyy-MM-dd"-->
+                <!--&gt;-->
+          <!--</el-date-picker>-->
+          <!--<div id="datePick">-->
+          <!--<el-button @click="formDate" type="text" size="small">测试</el-button>-->
+          <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+          <!--<label class="col-sm-3 control-label">-->
+            <!--A date picker with customized date format:-->
+          <!--</label>-->
+          <!--<div class="col-sm-5">-->
+            <!--<vue-datetime-picker class="vue-picker3" name="picker3"-->
+                                 <!--model="{{@ result3}}"-->
+                                 <!--type="date"-->
+                                 <!--language="en-US"-->
+                                 <!--date-format="L">-->
+            <!--</vue-datetime-picker>-->
+          <!--</div>-->
+          <!--<div class="col-sm-4">-->
+            <!--<p class="form-control-static">-->
+              <!--Selected Date: <span class="vue-result3">{{formatDate(result3)}}</span>-->
+            <!--</p>-->
+          <!--</div>-->
+        <!--</div>-->
+
+
       </div>
       <div class="box">
         <div class="table">
@@ -32,16 +68,50 @@
       </div>
     </div>
   </template>
-
-
 <script>
+
   import global_ from "../../Global.vue"
+//  import Vue from 'vue'
+
+
+//  var vm = new Vue({
+//      el: "#app",
+//      components: {
+//          "vue-datetime-picker": require("vue-datetime-picker")
+//      },
+//      data: {
+//          result3: null,
+//      },
+//      methods: {
+//          formatDate: function(date) {
+//              if (date === null) {
+//                  return "[null]";
+//              } else {
+//                  return date.format("YYYY-MM-DD");
+//              }
+//          },
+//      }
+//  });
+
+
   export default {
     name:'ReportTable',
     methods: {
           goReport:function () {
             this.$router.push( {path:'/stepfour'})
           },
+//        formDate : function() {
+//            String(this.value11).substring(0,10);
+//            console.log(this.value11);
+//        },
+//        formatDate: function() {
+//            if (this.result === null) {
+//                return "[null]";
+//            } else {
+//                return this.result.format("YYYY-MM-DD");
+//            }
+//        },
+
       indexMethod(index) {
         return index +1;
       },
@@ -142,6 +212,7 @@
     data() {
       return {
         tableData4: [],
+          value11:'1'
       }
     },
     mounted() {
@@ -174,7 +245,6 @@
       )
     },
   }
-
 </script>
 
 
