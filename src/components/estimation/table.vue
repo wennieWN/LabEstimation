@@ -56,20 +56,27 @@
           center: true
         })
           .then(() => {
-            rows.splice(index, 1),
-          this.$message(
+            this.$http.post('http://192.168.1.122:8011/estimation/deleteRequirement/' + this.tableData4[index].rId).then(res=>{
+                rows.splice(index, 1);
+            this.$message(
             {
-            type: 'success',
-            message: '删除成功!'
-          }
+              type: 'success',
+             message: '删除成功!'
+           }
           );
+            },res=>{
+              this.$message({
+                type: 'info',
+                message:'删除失败!'
+              });
+            })
         })
-          .catch(() => {
-          this.$message({
-            type: 'info',
-            message:'已取消删除!'
-          });
-        });
+//          .catch(() => {
+//          this.$message({
+//            type: 'info',
+//            message:'已取消删除!'
+//          });
+//        });
       },
       modify(index){
         var s="待修改";
@@ -134,7 +141,7 @@
     },
     data() {
       return {
-        tableData4: []
+        tableData4: [],
       }
     },
     mounted() {
@@ -154,7 +161,7 @@
             temp.rId = res.body[i].id;
             temp.proName = res.body[i].description.projectName;
             temp.proIntro = res.body[i].description.projectDescription;
-            temp.createTime = res.body[i].createTime.split('T')[0] + res.body[i].createTime.split('T')[1].split('.')[0];
+            temp.createTime = res.body[i].createTime.split('T')[0];
             temp.state = res.body[i].state;
             temp.method = res.body[i].description.estimationMethod;
             temp.remark = res.body[i].remark;

@@ -34,9 +34,8 @@
 
                 <el-form-item label="估算方式"  >
                     <el-select  style="padding-right: 80%" v-model="form.estimationMethod" placeholder="请选择估算方式">
-                        <el-option label="IFPUG/COSMIC" value="IFPUG/COSMIC"></el-option>
-                        <el-option label="A" value="A"></el-option>
-                        <el-option label="B" value="B"></el-option>
+                        <el-option label="IFPUG" value="IFPUG"></el-option>
+                        <el-option label="COSMIC" value="COSMIC"></el-option>
                     </el-select >
                 </el-form-item>
                 <el-form-item>

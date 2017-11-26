@@ -9,7 +9,7 @@
             <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509041832135&di=abc5c99b8048b0c600049e68cdb64602&imgtype=0&src=http%3A%2F%2Fimglf1.ph.126.net%2FnMbQAfw2LAJG4ahCYE_XJA%3D%3D%2F3886606478520925399.jpg">
           </div>
           <div class="person-info">
-            <div class="name">用户创建估算--功能分解</div>
+            <div class="name">用户创建估算--调整因子</div>
             <div class="info">yourNAME</br></div>
           </div>
         </div>
@@ -17,26 +17,41 @@
     </div>
     <div class="steptwo_content">
       <div id="directory">
+
+
         <div class="tree_btn">
-          <el-button size="small" id="btn1" type="primary " @click="expand_all()">Expand</el-button>
-          <el-button size="small" id="btn2" @click="collapse_all()">Collapse</el-button>
+          <el-button size="small" id="btn1" type="primary " @click="expand_all()">Expand
+          </el-button>
+
+          <el-button size="small" id="btn2" @click="collapse_all()">Collapse
+          </el-button>
         </div>
+
         <div id="div_tree" class="tree"></div>
       </div>
+
       <div id="rightform" class="content" :model="dynamicForm" :ref="dynamicForm">
         <el-form class="form-input" :inline="true" align="center">
           <el-form-item class="form-input-item1" label="内部文件">
             <el-input v-model="ilfStr"></el-input>
           </el-form-item>
+
           <el-form-item class="form-input-item2" label="外部文件">
             <el-input v-model="eifStr"></el-input>
           </el-form-item>
         </el-form>
+
+
         <div class="step-box">
+
           <el-button class="step-box-plus" @click.prevent="addStep()" type="primary "><i class="el-icon-plus"></i>
           </el-button>
+
           <div class="step-set-list">
-            <el-collapse class="step-set" v-for="(step, indexout) in dynamicForm.steps" :key="step.key" :prop="'steps.'+indexout+'.value'">
+            <el-collapse class="step-set" v-for="(step, indexout) in dynamicForm.steps" :key="step.key"
+                         :prop="'steps.'+indexout+'.value'">
+
+
               <el-collapse-item>
                 <template slot="title">
                   <div class="input-box">
@@ -47,7 +62,10 @@
                       class="el-icon-minus"></i>
                     </el-button>
                   </div>
+
                 </template>
+
+
                 <div class="out-in">
                   <el-form ref="dynamicForm" style="order: 1;" class="demo-dynamic file-type"
                            :label-position="labelPosition">
@@ -150,22 +168,22 @@
             </el-collapse>
           </div>
         </div>
+        <div class="style-bottom-btn">
+          <el-button class="bottom-btn1" v-on:click="toStepOne">Prev</el-button>
+          <el-button class="bottom-btn2" type="primary" v-on:click="saveForm">Save</el-button>
+          <el-button class="bottom-btn3" type="primary" v-on:click="toStepThree">Next</el-button>
+        </div>
       </div>
 
-    </div>
-    <div class="bottom-btn">
-      <el-button class="bottom-btn1" v-on:click="toStepOne">返回</el-button>
-      <el-button class="bottom-btn2" type="primary" v-on:click="toStepThree">提交</el-button>
     </div>
   </div>
 
 </template>
 
 <script>
-
-  import Head2 from "../../components/Head2.vue";
-  import '../../../config/Aimara'
   import global_ from "../../Global.vue"
+  import Head2 from "../../components/Head2.vue";
+//  import '../../../config/Aimara'
   //    import MessageBox from 'MessageBox'
   export default {
     name: "StepTwo",
@@ -178,6 +196,7 @@
         tree: {},
         v_tree: {},
         node: {},
+        rightnode: {},
         length: length,
         step_num: 1,
         cur:{
@@ -227,6 +246,7 @@
 //      },
 
     computed: {
+
       // 计算属性的 getter
       ilfSets: function () {
         var set = this.ilfStr.split(' ')
@@ -288,12 +308,11 @@
 
 
       toStepOne() {
+
         this.$router.push({path: '/stepone'});
       },
+
       toStepThree() {
-        this.$router.push({path: '/stepthree'});
-      },
-      /*toStepThree() {
 //////////仅测试用//////
 //        this.$router.push({path: '/editreport'});
 
@@ -317,20 +336,47 @@
 //        }
 //
         var msg = {
-          "id": this.currentID,
-          "transactionName": 'test',
+          "tId": this.cur.id,
+          "transactionName": this.cur.name,
           "nameOfILF": this.ilfStr,
-          "nameOfELF": this.eifStr,
+          "nameOfEIF": this.eifStr,
           "steps": this.dynamicForm.steps,
         }
-        this.$http.post('http://192.168.1.122:8011/estimation/addTransaction/' + global_.ID, msg).then(res => {
+//                console.log(msg)
+        this.$http.post('http://192.168.1.122:8011/estimation/updateTransaction/' + global_.ID, msg).then(res => {
           //alert("success")
         }, res => {
           //alert("fail0")
         })
 
 
-      },*/
+
+        this.$router.push({path: '/stepthree'});
+
+
+      },
+
+      saveForm(){
+        var msg = {
+          "tId": this.cur.id,
+          "transactionName": this.cur.name,
+          "nameOfILF": this.ilfStr,
+          "nameOfEIF": this.eifStr,
+          "steps": this.dynamicForm.steps,
+        }
+//                console.log(msg)
+        this.$http.post('http://192.168.1.122:8011/estimation/updateTransaction/' + global_.ID, msg).then(res => {
+          this.$message({
+            type: 'info',
+            message: '保存成功'
+          });
+        }, res => {
+          this.$message({
+            type: 'info',
+            message: '保存失败'
+          });
+        })
+      },
 
       removeStep(item) {
         var index = this.dynamicForm.steps.indexOf(item)
@@ -340,6 +386,7 @@
       },
       addStep() {
         this.dynamicForm.steps.push({
+          name : '',
           ilfs: [{
             name: '',
             dataFields: [],
@@ -424,6 +471,20 @@
       //返回栈顶元素，同时top的位置减1
       pop(owner, vue) {
         return owner[--this.top];
+      },
+
+
+      findNodeInSubtree(root){
+       var temp=this.rightnode;
+
+        while(temp!=null){
+          if(temp===root)
+            return true;
+          temp=temp.parent;
+        }
+
+        return false;
+
       },
 
 
@@ -650,7 +711,7 @@
 
             var v_exp_col = null;
 
-            if (p_node.childNodes.length == 0) {
+            if (p_node.type === 'file') {
               v_exp_col = vue.createImgElement('toggle_off', 'exp_col ' + 'el-icon-caret-bottom');
               v_exp_col.style.visibility = "hidden";
             }
@@ -750,7 +811,7 @@
           ///// Expanding node
           // p_node: Reference to the node;
           expandNode(p_node) {
-            if (p_node.childNodes.length > 0 && p_node.expanded == false) {
+            if (p_node.type==='folder' && p_node.expanded == false) {
               if (this.nodeBeforeOpenEvent != undefined)
                 this.nodeBeforeOpenEvent(p_node);
 
@@ -770,7 +831,7 @@
           ///// Collapsing node
           // p_node: Reference to the node;
           collapseNode(p_node) {
-            if (p_node.childNodes.length > 0 && p_node.expanded == true) {
+            if (p_node.type==='folder' && p_node.expanded == true) {
               var img = p_node.elementLi.getElementsByTagName("i")[0];
 
               p_node.expanded = false;
@@ -787,7 +848,7 @@
           ///// Toggling node
           // p_node: Reference to the node;
           toggleNode(p_node) {
-            if (p_node.childNodes.length > 0) {
+            if (p_node.type==='folder') {
               if (p_node.expanded)
                 p_node.collapseNode();
               else
@@ -800,6 +861,9 @@
 
             if (p_node.type=='folder') {
               this.toggleNode(p_node);
+            }
+            else if(p_node.id==vue.cur.id){
+              return;
             }
             else if(vue.cur.id!==null){
               ///////////////////////////////////////
@@ -821,6 +885,7 @@
                   //alert("success999")
 
                   vue.cur.id=p_node.id;
+                  vue.rightnode=p_node;
                   vue.cur.name=p_node.text;
 
                   document.getElementById('rightform').style.visibility='visible';
@@ -830,7 +895,11 @@
 
                   vue.$http.post('http://192.168.1.122:8011/estimation/getTransaction/' + global_.ID, msg).then(res => {
                     //alert("success")
-                    console.log(res.body)
+
+
+                    vue.dynamicForm.steps.length = 0;
+
+//                    console.log(res.body)
                     vue.ilfStr=res.body.nameOfILF;
                     vue.eifStr=res.body.nameOfEIF;
 //                    vue.dynamicForm.steps=res.body.steps;
@@ -860,19 +929,36 @@
 //                        value: ''
 //                      }]
 //                    }
+                    if(res.body.steps.length === 0){
+                      vue.addStep();
+                    }
                     for(var i=0;i<res.body.steps.length;i++){
-                      vue.dynamicForm.steps[i].name=res.body.steps[i].stepName;
+                      vue.dynamicForm.steps.push({
+                        "name":res.body.steps[i].stepName,
+                        "ilfs":[],
+                        "eifs":[]
+                      });
                       for(var j=0;j<res.body.steps[i].ilfDataSets.length;j++){
-                        vue.dynamicForm.steps[i].ilfs[j].name=res.body.steps[i].ilfDataSets[0].innerlogicalFileName;
+                        vue.dynamicForm.steps[i].ilfs.push({
+                          "name":res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
+                          "dataFields":[]
+                        });
                         for(var k=0;k<res.body.steps[i].ilfDataSets[j].det.length;k++){
-                          vue.dynamicForm.steps[i].ilfs[j].dataFields[k].value=res.body.steps[i].ilfDataSets[j].det[k];
+                          vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
+                            "value":res.body.steps[i].ilfDataSets[j].det[k]
+                          });
                         }
                       }
 
                       for(var j=0;j<res.body.steps[i].eifDataSets.length;j++){
-                        vue.dynamicForm.steps[i].eifs[j].name=res.body.steps[i].eifDataSets[j].externalInterfaceFileName;
+                        vue.dynamicForm.steps[i].eifs.push({
+                          "name":res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
+                          "dataFields" : []
+                        });
                         for(var k=0;k<res.body.steps[i].eifDataSets[j].det.length;k++){
-                          vue.dynamicForm.steps[i].eifs[j].dataFields[k].value=res.body.steps[i].eifDataSets[j].det[k];
+                          vue.dynamicForm.steps[i].eifs[j].dataFields.push({
+                            "value":res.body.steps[i].eifDataSets[j].det[k]
+                          });
                         }
                       }
 
@@ -887,6 +973,7 @@
                   //alert("fail999")
 
                   vue.cur.id=p_node.id;
+                  vue.rightnode=p_node;
                   vue.cur.name=p_node.text;
 
 
@@ -896,27 +983,47 @@
 
                   vue.$http.post('http://192.168.1.122:8011/estimation/getTransaction/' + global_.ID, msg).then(res => {
                     //alert("success")
-                    vue.ilfStr=res.nameOfILF;
-                    vue.eifStr=res.nameOfEIF;
-                    vue.dynamicForm.steps=res.steps;
 
+                    vue.dynamicForm.steps.length = 0;
+                    vue.ilfStr=res.body.nameOfILF;
+                    vue.eifStr=res.body.nameOfEIF;
+//                    vue.dynamicForm.steps=res.body.steps;
+
+                    if(res.body.steps.length === 0){
+                      vue.addStep();
+                    }
                     for(var i=0;i<res.body.steps.length;i++){
-                      vue.dynamicForm.steps[i].name=res.body.steps[i].stepName;
+                      vue.dynamicForm.steps.push({
+                        "name":res.body.steps[i].stepName,
+                        "ilfs":[],
+                        "eifs":[]
+                      });
                       for(var j=0;j<res.body.steps[i].ilfDataSets.length;j++){
-                        vue.dynamicForm.steps[i].ilfs[j].name=res.body.steps[i].ilfDataSets[0].innerlogicalFileName;
+                        vue.dynamicForm.steps[i].ilfs.push({
+                          "name":res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
+                          "dataFields":[]
+                        });
                         for(var k=0;k<res.body.steps[i].ilfDataSets[j].det.length;k++){
-                          vue.dynamicForm.steps[i].ilfs[j].dataFields[k].value=res.body.steps[i].ilfDataSets[j].det[k];
+                          vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
+                            "value":res.body.steps[i].ilfDataSets[j].det[k]
+                          });
                         }
                       }
 
                       for(var j=0;j<res.body.steps[i].eifDataSets.length;j++){
-                        vue.dynamicForm.steps[i].eifs[j].name=res.body.steps[i].eifDataSets[j].externalInterfaceFileName;
+                        vue.dynamicForm.steps[i].eifs.push({
+                          "name":res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
+                          "dataFields" : []
+                        });
                         for(var k=0;k<res.body.steps[i].eifDataSets[j].det.length;k++){
-                          vue.dynamicForm.steps[i].eifs[j].dataFields[k].value=res.body.steps[i].eifDataSets[j].det[k];
+                          vue.dynamicForm.steps[i].eifs[j].dataFields.push({
+                            "value":res.body.steps[i].eifDataSets[j].det[k]
+                          });
                         }
                       }
 
                     }
+
 
                   }, res => {
                     //alert("fail000")
@@ -925,12 +1032,12 @@
 
 
               })
-//                .catch(() => {
-//
-//
-//                console.log(p_node);
-//
-//              });
+                .catch(() => {
+
+                  if(vue.rightnode!==null){
+                    vue.tree.selectNode(vue.rightnode);
+                  }
+              });
 
 
 
@@ -940,8 +1047,63 @@
 
             else {
               vue.cur.id=p_node.id;
+              vue.rightnode=p_node;
               vue.cur.name=p_node.text;
               document.getElementById('rightform').style.visibility='visible';
+
+              var msg = {
+                "tId": vue.cur.id
+              }
+
+              vue.$http.post('http://192.168.1.122:8011/estimation/getTransaction/' + global_.ID, msg).then(res => {
+                //alert("success")
+
+                vue.dynamicForm.steps.length = 0;
+//                console.log(vue.dynamicForm);
+                vue.ilfStr=res.body.nameOfILF;
+                vue.eifStr=res.body.nameOfEIF;
+
+                if(res.body.steps.length === 0){
+                  vue.addStep();
+                }
+                for(var i=0;i<res.body.steps.length;i++){
+                  vue.dynamicForm.steps.push({
+                    "name":res.body.steps[i].stepName,
+                    "ilfs":[],
+                    "eifs":[]
+                  });
+                  for(var j=0;j<res.body.steps[i].ilfDataSets.length;j++){
+                    vue.dynamicForm.steps[i].ilfs.push({
+                      "name":res.body.steps[i].ilfDataSets[j].innerlogicalFileName,
+                      "dataFields":[]
+                    });
+                    for(var k=0;k<res.body.steps[i].ilfDataSets[j].det.length;k++){
+                      vue.dynamicForm.steps[i].ilfs[j].dataFields.push({
+                        "value":res.body.steps[i].ilfDataSets[j].det[k]
+                      });
+                    }
+                  }
+
+                  for(var j=0;j<res.body.steps[i].eifDataSets.length;j++){
+                    vue.dynamicForm.steps[i].eifs.push({
+                      "name":res.body.steps[i].eifDataSets[j].externalInterfaceFileName,
+                      "dataFields" : []
+                    });
+                    for(var k=0;k<res.body.steps[i].eifDataSets[j].det.length;k++){
+                      vue.dynamicForm.steps[i].eifs[j].dataFields.push({
+                        "value":res.body.steps[i].eifDataSets[j].det[k]
+                      });
+                    }
+                  }
+
+                }
+
+
+              }, res => {
+                //alert("fail000")
+              })
+
+
 
             }
           },
@@ -1273,6 +1435,9 @@
                           }, res => {
                             //alert("fail0")
                           })
+                          if(vue.rightnode!==null){
+                            vue.tree.selectNode(vue.rightnode);
+                          }
 
 
                         })
@@ -1282,7 +1447,11 @@
                             type: 'info',
                             message: '取消新建节点'
                           });
-                        });
+                            if(vue.rightnode!==null){
+                              vue.tree.selectNode(vue.rightnode);
+                            }
+                          });
+
 
                       }
                     },
@@ -1321,24 +1490,33 @@
                             "name" : tempNode.text,
                             "tree" : temp
                           }
-                          console.log(Msg)
+//                          console.log(Msg)
 
                           vue.$http.post('http://192.168.1.122:8011/estimation/addTree/' + global_.ID, Msg).then(res => {
                             //alert("success")
                           }, res => {
                             //alert("fail0")
                           })
+                          if(vue.rightnode!==null){
+                            vue.tree.selectNode(vue.rightnode);
+                          }
+
+
 
 
                         })
-                          .catch(() => {
-                            vue.$message({
-
-                              type: 'info',
-                              message: '取消新建节点'
-                            });
-                          });
-
+//                          .catch(() => {
+//                            vue.$message({
+//
+//                              type: 'info',
+//                              message: '取消新建节点'
+//                            });
+//
+//                            if(vue.rightnode!==null){
+//                              vue.tree.selectNode(vue.rightnode);
+//                            }
+//
+//                          });
                       }
                     },
 
@@ -1347,8 +1525,11 @@
                       icon: 'menu_img el-icon-close',
                       action: function (vue,node) {
 
-                        vue.cur.id=null;
-                        document.getElementById('rightform').style.visibility='hidden';
+//                        vue.cur.id=null;
+//                        if(vue.rightnode!==null){
+//                          vue.tree.selectNode(vue.rightnode);
+//                        }
+//                        document.getElementById('rightform').style.visibility='hidden';
 
                         vue.$confirm('此操作将永久删除子节点, 是否继续?', '提示', {
                           confirmButtonText: '确定',
@@ -1368,6 +1549,21 @@
                             "tree" : temp
                           }
                           vue.$http.post('http://192.168.1.122:8011/estimation/addTree/' + global_.ID, updateTree);
+
+                          if(node===vue.rightnode){
+
+                          }
+                          else if(vue.findNodeInSubtree(node)){
+                            vue.cur.id=null;
+                            vue.rightnode=null;
+                            document.getElementById('rightform').style.visibility='hidden';
+                          }
+                          else{
+                            if(vue.rightnode!==null){
+                              vue.tree.selectNode(vue.rightnode);
+                            }
+                          }
+
                           //alert("success")
                         }, res => {
                           //alert("fail0")
@@ -1382,17 +1578,13 @@
 //                            });
 //                          });
 
-
                       }
                     },
                     {
                       text: 'Delete Node',
                       icon: 'menu_img el-icon-close',
                       action: function (vue, node) {
-                        if(node==vue.cur.id){
-                          vue.cur.id=null;
-                          document.getElementById('rightform').style.visibility='hidden';
-                        }
+
                         vue.$confirm('此操作将永久删除该节点, 是否继续?', '提示', {
                           confirmButtonText: '确定',
                           cancelButtonText: '取消',
@@ -1422,7 +1614,20 @@
                             "tree" : temp
                           }
                           vue.$http.post('http://192.168.1.122:8011/estimation/addTree/' + global_.ID, updateTree);
-                          //alert("success")
+
+
+                          if(vue.findNodeInSubtree(node)){
+                            vue.cur.id=null;
+                            vue.rightnode=null;
+                            document.getElementById('rightform').style.visibility='hidden';
+                          }
+                          else{
+                            if(vue.rightnode!==null){
+                              vue.tree.selectNode(vue.rightnode);
+                            }
+                          }
+
+
                         }, res => {
                           //alert("fail0")
                         })
@@ -1430,13 +1635,13 @@
 
 
 
-//                          .catch(() => {
-//                            vue.$message({
-//
-//                              type: 'info',
-//                              message: '取消删除节点'
-//                            });
-//                          });
+                          .catch(() => {
+                            vue.$message({
+
+                              type: 'info',
+                              message: '取消删除节点'
+                            });
+                          });
 
 
 
@@ -1449,15 +1654,15 @@
                       text: 'Create Sibling File',
                       icon: 'menu_img el-icon-plus',
                       action: function (vue, node) {
-                        if(node.type=='file'){
-                          vue.$message({
-
-                            type: 'info',
-                            message: '不能在文件节点上添加文件夹'
-                          });
-
-                          return;
-                        }
+//                        if(node.type=='file'){
+//                          vue.$message({
+//
+//                            type: 'info',
+//                            message: '不能在文件节点上添加文件夹'
+//                          });
+//
+//                          return;
+//                        }
 
 
                         vue.$prompt('Enter the node name', '提示', {
@@ -1491,6 +1696,10 @@
                             //alert("fail0")
                           })
 
+                          if(vue.rightnode!==null){
+                            vue.tree.selectNode(vue.rightnode);
+                          }
+
 
                         })
                           .catch(() => {
@@ -1499,6 +1708,9 @@
                               type: 'info',
                               message: '取消新建节点'
                             });
+                            if(vue.rightnode!==null){
+                              vue.tree.selectNode(vue.rightnode);
+                            }
                           });
 
 
@@ -1540,7 +1752,9 @@
                           }, res => {
                             //alert("fail0")
                           })
-
+                          if(vue.rightnode!==null){
+                            vue.tree.selectNode(vue.rightnode);
+                          }
 
                         })
                           .catch(() => {
@@ -1549,6 +1763,9 @@
                               type: 'info',
                               message: '取消新建节点'
                             });
+                            if(vue.rightnode!==null){
+                              vue.tree.selectNode(vue.rightnode);
+                            }
                           });
 
 
@@ -1561,7 +1778,7 @@
 
 
 
-                        if(node.parent==vue.tree&&vue.tree.childNodes.length<=1){
+                        if(vue.tree.childNodes.length<=1&&node===vue.tree.childNodes[0]){
                           vue.$message({
 
                             type: 'info',
@@ -1573,6 +1790,17 @@
 
                         vue.cutNode = node;
                         node.removeNode(vue);
+
+                        if(vue.findNodeInSubtree(node)){
+//                          vue.cur.id=null;
+//                          vue.rightnode=null;
+                          document.getElementById('rightform').style.visibility='hidden';
+                        }
+                        else {
+                          if(vue.rightnode!==null){
+                            vue.tree.selectNode(vue.rightnode);
+                          }
+                        }
 
 
 //                        var temp={};
@@ -1608,7 +1836,7 @@
                           return;
                         }
 
-                        var tempNode=node.createChildNode(vue, vue.cutNode.text, true, vue.cutNode.icon, node, null, 'context1',vue.cutNode.id,vue.cutNode.type);
+                        var tempNode=node.createChildNode(vue, vue.cutNode.text, true, vue.cutNode.icon, node, 'context1',vue.cutNode.id,vue.cutNode.type);
 
                         //递归
                         pasteChildNode(vue, node.childNodes[node.childNodes.length - 1], vue.cutNode);
@@ -1627,15 +1855,27 @@
 
                         vue.$http.post('http://192.168.1.122:8011/estimation/addTree/' + global_.ID, Msg).then(res => {
                           //alert("success")
+                          if(vue.findNodeInSubtree(node)){
+
+
+                            if(vue.rightnode!=null){
+                              vue.tree.selectNode(vue.rightnode);
+                            }
+                            document.getElementById('rightform').style.visibility='visible';
+                          }
                         }, res => {
                           //alert("fail0")
                         })
 
 
+
+
+
+
                         function pasteChildNode(vue, parentNode, cutNode) {
                           if (cutNode.childNodes.length != 0) {
                             for (var i = 0; i < cutNode.childNodes.length; i++) {
-                              parentNode.createChildNode(vue, cutNode.childNodes[i].text, true, cutNode.childNodes[i].icon, parentNode, null, 'context1',cutNode.childNodes[i].type);
+                              parentNode.createChildNode(vue, cutNode.childNodes[i].text, true, cutNode.childNodes[i].icon, parentNode, 'context1',cutNode.childNodes[i].id,cutNode.childNodes[i].type);
                               pasteChildNode(vue, parentNode.childNodes[i], cutNode.childNodes[i]);
                             }
                           }
@@ -1685,14 +1925,20 @@
                               //alert("fail0")
                             })
 
+                            if(vue.rightnode!==null){
+                              vue.tree.selectNode(vue.rightnode);
+                            }
 
                           })
-//                            .catch(() => {
-//                            vue.$message({
-//                              type: 'info',
-//                              message: '取消重命名节点'
-//                            });
-//                          });
+                            .catch(() => {
+                            vue.$message({
+                              type: 'info',
+                              message: '取消重命名节点'
+                            });
+                              if(vue.rightnode!==null){
+                                vue.tree.selectNode(vue.rightnode);
+                              }
+                            });
 
 
 
@@ -1793,6 +2039,7 @@
         this.tree.drawTree(this);
 
         this.cur.id=null;
+        this.rightnode=null;
 
 
 
@@ -1839,7 +2086,7 @@
     margin-left:10% ;
     display: flex;
     flex-direction: row;
-    background: rgba(53,94,122, 0.8);
+    background: rgba(53,94,122, 0.7);
   }
   .header1 .page-header1 {
     border-radius: 4px 4px 0 0;
@@ -1878,18 +2125,17 @@
     color: grey;
     font-size: 15px;
     line-height: 24px;}
-
   #rightform{
     visibility: hidden;
   }
 
   .steptwo_content {
-    width: 80%;
     /*text-align: center;*/
-    margin-top: 50px;
+    margin-top: 100px;
     /*width: 30%;*/
     margin-left: 10%;
     /*margin-right: auto;*/
+    width: 80%;
     /*max-width: 280px;;*/
     display: -webkit-flex;
     display: flex;
@@ -1913,7 +2159,7 @@
   .no_account {
     float: right;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
 
   }
 
@@ -2018,7 +2264,7 @@
   .menu, .sub-menu {
     margin: 0;
     padding: 0;
-    font: 12px Verdana, sans-serif;
+    font: 13px Verdana, sans-serif;
   }
 
   .menu,
@@ -2122,7 +2368,7 @@
 
   #div_tree {
     margin-top: 20px;
-    font: 12px Verdana, sans-serif;
+    font: 13px Verdana, sans-serif;
     display: inline-block;
     width: 280px;
 
@@ -2149,6 +2395,7 @@
     /*height: 300px;*/
     order: 1;
     flex-grow: 3;
+     width: 5%;
     display: -webkit-flex;
     display: flex;
     display: inline-flex;
@@ -2157,14 +2404,17 @@
     flex-wrap: wrap;
     align-items: flex-start;
     align-content: flex-start;
-    width: 5%;
+
   }
 
   .content {
-
     order: 2;
     flex-grow: 5;
-    width: 70%;
+    width: 65%;
+    /*margin: 10px;*/
+    /*display: block;*/
+    /*max-width: 650px;*/
+    margin-left: 5%;
     display: -webkit-flex;
     display: flex;
     display: inline-flex;
@@ -2202,6 +2452,7 @@
   }
 
   .form-input {
+    margin-bottom: 20px;
     width: 100%;
     display: -webkit-flex;
     display: flex;
@@ -2231,10 +2482,7 @@
     flex-wrap: nowrap;
     align-items: flex-start;
     align-content: flex-start;
-    width:100%;
-    -webkit-box-pack: center;
-    justify-content: center;
-
+    margin-left: 15%;
   }
 
   .step-box-plus {
@@ -2268,29 +2516,35 @@
     order: 2;
   }
 
-  .bottom-btn {
+  .style-bottom-btn {
     display: -webkit-flex;
     display: flex;
     display: inline-flex;
-    display: -webkit-inline-flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    position: relative;
+    /*display: -webkit-inline-flex;*/
+    /*flex-direction: row;*/
+    /*flex-wrap: wrap;*/
     align-items: center;
     align-content: flex-start;
     justify-content: center;
     width: 100%;
-    margin-top: 40px;
+    margin-top: 30px;
   }
 
-  .bottom-btn1 {
-    margin: 5px;
-    order: 1;
-  }
+  /*.bottom-btn1 {*/
+    /*margin: 5px;*/
+    /*order: 1;*/
+  /*}*/
 
-  .bottom-btn2 {
-    margin: 5px;
-    order: 2;
-  }
+  /*.bottom-btn1 {*/
+    /*margin: 5px;*/
+    /*order: 2;*/
+  /*}*/
+
+  /*.bottom-btn3 {*/
+    /*margin: 5px;*/
+    /*order: 3;*/
+  /*}*/
 
   . file-type {
     display: -webkit-flex;

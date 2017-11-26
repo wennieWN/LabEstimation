@@ -7,11 +7,8 @@ import Register from '@/views/Register'
 import Center from '@/views/Center'
 import StepOne from '@/views/user/StepOne'
 import StepTwo from '@/views/user/StepTwo'
-import StepTwo1 from '@/views/user/StepTwo1'
 import StepThree from '@/views/user/StepThree'
 import StepFour from '@/views/user/StepFour'
-import GenerateReport from '@/components/estimation/GenerateReport'
-import EditReport from '@/components/estimation/EditReport'
 import VER from  '@/views/user/view_estimated_report'
 import MVER from '@/views/manager/ManagerEstView_report'
 import ManagerStepTwo from '@/views/manager/ManagerStepTwo'
@@ -54,18 +51,6 @@ export default new Router({
         path: '/steptwo',
         name: 'StepTwo',
         component: StepTwo
-    },{
-      path: '/steptwo1',
-      name: 'StepTwo1',
-      component: StepTwo1
-    }, {
-      path: '/generatereport',
-      name: 'GenerateReport',
-      component: GenerateReport
-    }, {
-      path: '/editreport',
-      name: 'EditReport',
-      component: EditReport
     },
       {
         path: '/ver',
