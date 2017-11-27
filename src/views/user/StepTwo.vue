@@ -249,7 +249,7 @@
 
       // 计算属性的 getter
       ilfSets: function () {
-        var set = this.ilfStr.split(' ')
+        var set = this.ilfStr.trim().split(' ')
         var jsonArray = []
 
         for (var i = 0; i < set.length; i++) {
@@ -260,7 +260,7 @@
       },
 
       eifSets: function () {
-        var set = this.eifStr.split(' ')
+        var set = this.eifStr.trim().split(' ')
         var jsonArray = []
 
         for (var i = 0; i < set.length; i++) {
@@ -775,7 +775,7 @@
           ///// Expanding all tree nodes
           expandTree() {
             for (var i = 0; i < this.childNodes.length; i++) {
-              if (this.childNodes[i].childNodes.length > 0) {
+              if (this.childNodes[i].type==='folder') {
                 this.expandSubtree(this.childNodes[i]);
               }
             }
@@ -785,7 +785,7 @@
           expandSubtree(p_node) {
             this.expandNode(p_node);
             for (var i = 0; i < p_node.childNodes.length; i++) {
-              if (p_node.childNodes[i].childNodes.length > 0) {
+              if (p_node.childNodes[i].type==='folder') {
                 this.expandSubtree(p_node.childNodes[i]);
               }
             }
@@ -793,7 +793,7 @@
           ///// Collapsing all tree nodes
           collapseTree() {
             for (var i = 0; i < this.childNodes.length; i++) {
-              if (this.childNodes[i].childNodes.length > 0) {
+              if (this.childNodes[i].type==='folder') {
                 this.collapseSubtree(this.childNodes[i]);
               }
             }
@@ -803,7 +803,7 @@
           collapseSubtree(p_node) {
             this.collapseNode(p_node);
             for (var i = 0; i < p_node.childNodes.length; i++) {
-              if (p_node.childNodes[i].childNodes.length > 0) {
+              if (p_node.childNodes[i].type==='folder') {
                 this.collapseSubtree(p_node.childNodes[i]);
               }
             }
@@ -2328,7 +2328,7 @@
   }
 
   .menu {
-    width: 175px;
+    width: 190px;
     position: absolute;
     background: #F1F1F1;
     -webkit-user-select: none; /* Chrome/Safari */
@@ -2341,7 +2341,7 @@
   .sub-menu {
     display: none;
     position: absolute;
-    min-width: 175px;
+    min-width: 190px;
     box-shadow: 2px 2px 3px #BDBDBD;
   }
 

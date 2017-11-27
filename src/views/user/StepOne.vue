@@ -170,7 +170,7 @@
     .stepone_content {
         text-align: center;
         margin-top: 40px;
-        width: 64%;
+        width: 70%;
         margin-left: auto;
         margin-right: auto;
         .margin-bottom: 40px;

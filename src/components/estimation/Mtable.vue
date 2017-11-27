@@ -10,19 +10,19 @@
       <div class="table">
         <el-table :data="tableData4" style="width: 100%;margin: auto" height=400 >
           <el-table-column prop="id" label="id" width="80" type="index" :index="indexMethod"></el-table-column>
-          <el-table-column prop="proName" label="项目名称" width="150"></el-table-column>
+          <el-table-column prop="proName" label="项目名称" width="100"></el-table-column>
           <el-table-column prop="proIntro" label="项目简介" width="150"></el-table-column>
-          <el-table-column prop="createTime" label="创建时间" width="200"></el-table-column>
-          <el-table-column prop="state" label="状态" width="150"></el-table-column>
-          <el-table-column prop="method" label="估算方法" width="150"></el-table-column>
-          <el-table-column label="操作" width="218">
+          <el-table-column prop="createTime" label="创建时间" width="150"></el-table-column>
+          <el-table-column prop="state" label="状态" width="120"></el-table-column>
+          <el-table-column prop="method" label="估算方法" width="120"></el-table-column>
+          <el-table-column label="操作" width="180">
             <template slot-scope="scope">
               <!-- <el-button type="text" size="small" @click="edit(scope.$index, scope.row)">编辑</el-button>-->
                <el-button type="text" size="small" @click.native.prevent="goReport">查看报告</el-button>
                <el-button type="text" size="small" @click.native.prevent="goEst(scope.$index)">估算</el-button>
              </template>
            </el-table-column>
-           <el-table-column prop="remark" label="备注" width="200"></el-table-column>
+           <el-table-column prop="remark" label="备注" width="175"></el-table-column>
          </el-table>
         <!--  <el-dialog title="修改状态" :visible.sync="dialogFormVisible">
             <el-form :model="form">
