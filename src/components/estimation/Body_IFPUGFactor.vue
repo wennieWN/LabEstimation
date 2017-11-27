@@ -1,356 +1,222 @@
 <!--用户输入IFPUG调整因子-->
   <template>
-    <div class="container">
-      <el-row :gutter="20">
-        <el-col :span="3"><div class="grid-content bg-white">
-        </div></el-col>
-        <el-col :span="5"><div class="grid-content bg-white">
-          <span>开发类型</span>
-        </div></el-col>
-        <el-col :span="16"><div class="grid-content bg-white">
-          <el-radio-group v-model="tType">
-            <el-radio :label="'New Development'">New Development</el-radio>
-            <el-radio :label="'Enhencement'">Enhencement</el-radio>
-            <el-radio :label="'Re-development'">Re-development</el-radio>
-          </el-radio-group>
-        </div></el-col>
-      </el-row>
+    <div class="container" >
 
-      <el-row :gutter="20">
-        <el-col :span="3"><div class="grid-content bg-white">
-        </div></el-col>
-        <el-col :span="5"><div class="grid-content bg-white">
-          <span>开发平台</span>
-        </div></el-col>
-        <el-col :span="16"><div class="grid-content bg-white">
-          <el-radio-group v-model="tPlatform">
-            <el-radio :label="'Personal computer'">Personal computer</el-radio>
-            <el-radio :label="'Mainframe'">Mainframe</el-radio>
-            <el-radio :label="'Mid-range'">Mid-range</el-radio>
-          </el-radio-group>
-        </div></el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="3"><div class="grid-content bg-white">
-        </div></el-col>
-        <el-col :span="5"><div class="grid-content bg-white">
-          <span>开发语言</span>
-        </div></el-col>
-        <el-col :span="16"><div class="grid-content bg-white">
-          <el-radio-group v-model="tLanguage">
-            <el-radio :label="'3GL'">3GL</el-radio>
-            <el-radio :label="'4GL'">4GL</el-radio>
-            <el-radio :label="'ApG'">ApG</el-radio>
-          </el-radio-group>
-        </div></el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="3"><div class="grid-content bg-white">
-        </div></el-col>
-        <el-col :span="5"><div class="grid-content bg-white">
-          <span>是否使用数据库</span>
-        </div></el-col>
-        <el-col :span="16"><div class="grid-content bg-white">
-          <el-radio-group v-model="tDB">
-            <el-radio :label="1">Yes</el-radio>
-            <el-radio :label="0">No</el-radio>
-          </el-radio-group>
-        </div></el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="3"><div class="grid-content bg-white">
-        </div></el-col>
-        <el-col :span="5"><div class="grid-content bg-white">
-          <span>软件可靠性要求</span>
-        </div></el-col>
-        <el-col :span="16"><div class="grid-content bg-white">
-          <el-select v-model="tReliability" placeholder="请选择">
-            <el-option
-                    v-for="item in tReliabilityOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
-          </el-select>
-        </div></el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="3"><div class="grid-content bg-white">
-        </div></el-col>
-        <el-col :span="5"><div class="grid-content bg-white">
-          <span>产品复杂度</span>
-        </div></el-col>
-        <el-col :span="16"><div class="grid-content bg-white">
-          <el-select v-model="tComplexity" placeholder="请选择">
-            <el-option
-                    v-for="item in tComplexityOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
-          </el-select>
-        </div></el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="3"><div class="grid-content bg-white">
-        </div></el-col>
-        <el-col :span="5"><div class="grid-content bg-white">
-          <span>执行时间约束</span>
-        </div></el-col>
-        <el-col :span="16"><div class="grid-content bg-white">
-          <el-select v-model="tTime" placeholder="请选择">
-            <el-option
-                    v-for="item in tTimeOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
-          </el-select>
-        </div></el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="3"><div class="grid-content bg-white">
-        </div></el-col>
-        <el-col :span="5"><div class="grid-content bg-white">
-          <span>要求的开发进度</span>
-        </div></el-col>
-        <el-col :span="16"><div class="grid-content bg-white">
-          <el-select v-model="tSchedule" placeholder="请选择">
-            <el-option
-                    v-for="item in tScheduleOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
-          </el-select>
-        </div></el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="3"><div class="grid-content bg-white">
-        </div></el-col>
-        <el-col :span="5"><div class="grid-content bg-white">
-          <span>生产率</span>
-        </div></el-col>
-        <el-col :span="16"><div class="grid-content bg-white">
-          <el-input v-model="tProductivity" placeholder="10-30" style="width: 50%"></el-input>
-          <span>小时／FP</span>
-        </div></el-col>
-      </el-row>
-
-      <el-row :gutter="20">
-        <el-col :span="3"><div class="grid-content bg-white">
-        </div></el-col>
-        <el-col :span="5"><div class="grid-content bg-white">
-          <span>人力成本</span>
-        </div></el-col>
-        <el-col :span="16"><div class="grid-content bg-white">
-          <el-input v-model="tLabor" placeholder="请输入内容" style="width: 50%"></el-input>
-          <span>元／人月</span>
-        </div></el-col>
-      </el-row>
-      <div class="grid-content bg-white" style="margin: auto">
-        <el-button type="primary" @click="Prev" >返回</el-button>
-        <el-button type="primary" @click="Next">提交</el-button>
+      <!--开发类型、开发平台、开发语言、是否使用数据库-->
+      <div v-for="radio in radios" :key="radio.name">
+        <el-row :gutter="20">
+          <el-col :span="3"><div class="grid-content bg-white">
+          </div></el-col>
+          <el-col :span="5"><div class="grid-content bg-white">
+            <span>{{radio.name}}</span>
+          </div></el-col>
+          <el-col :span="16"><div class="grid-content bg-white">
+            <el-radio-group v-model="radio.val" v-for="t in radio.vals" :key="t.value">
+              <el-radio :label=t.value></el-radio>
+            </el-radio-group>
+          </div></el-col>
+        </el-row>
       </div>
+
+      <!--软件可靠性要求、产品复杂度、执行时间约束、要求的开发进度-->
+      <div v-for="selection in selections" :key="selection.name">
+        <el-row :gutter="20">
+          <el-col :span="3"><div class="grid-content bg-white">
+          </div></el-col>
+          <el-col :span="5"><div class="grid-content bg-white">
+            <span>{{selection.name}}</span>
+          </div></el-col>
+          <el-col :span="16"><div class="grid-content bg-white">
+            <el-select v-model="selection.val" placeholder="请选择">
+              <el-option
+                      v-for="item in selection.vals"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.label">
+              </el-option>
+            </el-select>
+          </div></el-col>
+        </el-row>
+      </div>
+
+      <!--生产率、人力成本-->
+      <div v-for="item in inputs" :key="item.name">
+        <el-row :gutter="20">
+          <el-col :span="3"><div class="grid-content bg-white">
+          </div></el-col>
+          <el-col :span="5"><div class="grid-content bg-white">
+            <span>{{item.name}}</span>
+          </div></el-col>
+          <el-col :span="16"><div class="grid-content bg-white">
+            <el-input v-model="item.val" placeholder="请输入数字" style="width: 50%"></el-input>
+            <span>{{item.unit}}</span>
+          </div></el-col>
+        </el-row>
+      </div>
+
+      <div class="grid-content bg-white" style="margin: auto">
+        <el-button type="primary" @click="toStepTwo" >返回</el-button>
+        <el-button type="primary" @click="toVer">提交</el-button>
+      </div>
+
     </div>
   </template>
 
 
 <script>
     import global_ from "../../Global.vue"
-
-//    var trans={
-//        "developmentType": this.tType,
-//        "developmentPlatform": this.tPlatform,
-//        "languageType": this.tLanguage,
-//        "DBMS_Used": this.tDB,
-//        "RELY": this.tReliability,
-//        "CPLX": this.tComplexity,
-//        "TIME": this.tTimeOptions,
-//        "SCED": this.tScheduleOptions,
-//        "productivity": this.tProductivity,
-//        "cost": this.tLabor
-//    }
-
-  export default {
-      name: 'Body_IFPUGFactor',
-      methods: {
-          Prev() {
-              this.$confirm('返回前页将不会保存当前内容, 是否继续?', '提示', {
-                  confirmButtonText: '确定',
-                  cancelButtonText: '取消',
-                  type: 'warning',
-                  center: true
-              }).then(() => {
-                  this.$router.push( {path:'/steptwo'});
-                  this.$message({
-                      type: 'success',
-                      message: '返回前页!'
-                  });
-              }).catch(() => {
-                  this.$message({
-                      type: 'info',
-                      message: '已取消操作'
-                  });
-              });
-          },
-          Next() {
-              console.log(global_.ID);
-              var trans = {
-                  "developmentType": this.tType,
-                  "developmentPlatform": this.tPlatform,
-                  "languageType": this.tLanguage,
-                  "DBMS_Used": Boolean(this.tDB),
-                  "RELY": this.tReliability,
-                  "CPLX": this.tComplexity,
-                  "TIME": this.tTime,
-                  "SCED": this.tSchedule,
-                  "productivity": this.tProductivity,
-                  "cost": this.tLabor
-              };
-              console.log(trans);
-              this.$confirm('是否提交当前信息?', '提示', {
-                  confirmButtonText: '确定',
-                  cancelButtonText: '取消',
-                  type: 'warning',
-                  center: true
-              }).then(() => {
-                this.$router.push( {path:'/ver'});
-                  this.$http.post('http://192.168.1.122:8011/estimation/addVAF/' + global_.ID, trans).then(response => {
-                      this.$message({
-                          type: 'success',
-                          message: '已提交当前信息!'
-                      });
-                  })
-              }).catch(() => {
-                  this.$message({
-                      type: 'info',
-                      message: '已取消操作'
-                  });
-              });
-          },
-
-//        Next() {
-//            var trans={
-//                "developmentType": this.tType,
-//                "developmentPlatform": this.tPlatform,
-//                "languageType": this.tLanguage,
-//                "DBMS_Used": Boolean(this.tDB),
-//                "RELY": this.tReliability,
-//                "CPLX": this.tComplexity,
-//                "TIME": this.tTime,
-//                "SCED": this.tSchedule,
-//                "productivity": this.tProductivity,
-//                "cost": this.tLabor
-//            }
-//            this.$confirm('是否提交当前信息, 进入下一步骤?', '提示', {
-//                confirmButtonText: '确定',
-//                cancelButtonText: '取消',
-//                type: 'warning',
-//                center: true
-//            }).then(() => {
-//                console.log(trans);
-//                this.$message({
-//                    type: 'success',
-//                    message: '已提交当前信息!'
-//                });
-//            }).catch(() => {
-//                this.$message({
-//                    type: 'info',
-//                    message: '已取消操作'
-//                });
-//            });
-//        }
-    },
-          data() {
-              return {
-                  tType: '', tPlatform: '', tLanguage: '', tDB: '',
-
-                  tReliabilityOptions: [{
-                      value: 1,
-                      label: 'Very Low'
-                  }, {
-                      value: 2,
-                      label: 'Low'
-                  }, {
-                      value: 3,
-                      label: 'Normal'
-                  }, {
-                      value: 4,
-                      label: 'High'
-                  }, {
-                      value: 5,
-                      label: 'Very High'
-                  }],
-
-                  tReliability: 1,
-
-                  tComplexityOptions: [{
-                      value: 1,
-                      label: 'Very Low'
-                  }, {
-                      value: 2,
-                      label: 'Low'
-                  }, {
-                      value: 3,
-                      label: 'Normal'
-                  }, {
-                      value: 4,
-                      label: 'High'
-                  }, {
-                      value: 5,
-                      label: 'Very High'
-                  }, {
-                      value: 6,
-                      label: 'Extra High'
-                  }],
-                  tComplexity: 1,
-
-                  tTimeOptions: [{
-                      value: 1,
-                      label: 'Normal'
-                  }, {
-                      value: 2,
-                      label: 'High'
-                  }, {
-                      value: 3,
-                      label: 'Very High'
-                  }, {
-                      value: 4,
-                      label: 'Extra High'
-                  }],
-                  tTime: 1,
-
-                  tScheduleOptions: [{
-                      value: 1,
-                      label: 'Very Low'
-                  }, {
-                      value: 2,
-                      label: 'Low'
-                  }, {
-                      value: 3,
-                      label: 'Normal'
-                  }, {
-                      value: 4,
-                      label: 'High'
-                  }, {
-                      value: 5,
-                      label: 'Very High'
-                  }],
-                  tSchedule: 1,
-
-                  tProductivity: 30,
-                  tLabor: 10
-              };
-          }
-      }
+    export default {
+        name: 'Body_IFPUGFactor',
+        methods: {
+            toStepTwo() {
+                this.$confirm('返回前页将不会保存当前内容, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    this.$router.push( {path:'/steptwo'});
+                    this.$message({
+                        type: 'success',
+                        message: '返回前页!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+                });
+            },
+            toVer() {
+                var trans = {
+                    "developmentType": this.radios[0].val,
+                    "developmentPlatform": this.radios[1].val,
+                    "languageType": this.radios[2].val,
+                    "DBMS_Used": this.radios[3].val,
+                    "RELY": this.selections[0].val,
+                    "CPLX": this.selections[1].val,
+                    "TIME": this.selections[2].val,
+                    "SCED": this.selections[3].val,
+                    "productivity": this.inputs[0].val,
+                    "cost": this.inputs[1].val
+                };
+                console.log(trans);
+                this.$confirm('是否提交当前信息?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    this.$router.push( {path:'/ver'});
+                    this.$http.post('http://192.168.1.122:8011/estimation/addVAF/' + global_.ID, trans).then(response => {
+                        this.$message({
+                            type: 'success',
+                            message: '已提交当前信息!'
+                        });
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+                });
+            },
+        },
+        data() {
+            return {
+                radios:[
+                    {
+                        name:"开发类型",
+                        val:"",
+                        vals:[
+                            {value:"New Development"},
+                            {value:"Enhencement"},
+                            {value:"Re-development"}
+                        ]
+                    },{
+                        name:"开发平台",
+                        val:"",
+                        vals:[
+                            {value:"Personal computer"},
+                            {value:"Mainframe"},
+                            {value:"Mid-range"}
+                        ]
+                    },{
+                        name:"开发语言",
+                        val:"",
+                        vals:[
+                            {value:"3GL"},
+                            {value:"4GL"},
+                            {value:"ApG"}
+                        ]
+                    },{
+                        name:"是否使用数据库",
+                        val:"",
+                        vals:[
+                            {value:"Yes"},
+                            {value:"No"}
+                        ]
+                    }
+                ],
+                selections:[
+                    {
+                        name:"软件可靠性要求",
+                        val:"",
+                        vals:[
+                            {value: 1, label: 'Very Low'
+                            }, {value: 2, label: 'Low'
+                            }, {value: 3, label: 'Normal'
+                            }, {value: 4, label: 'High'
+                            }, {value: 5, label: 'Very High'
+                            }]
+                    },{
+                        name:"产品复杂度",
+                        val:"",
+                        vals:[
+                            {value: 1, label: 'Very Low'
+                            }, {value: 2, label: 'Low'
+                            }, {value: 3, label: 'Normal'
+                            }, {value: 4, label: 'High'
+                            }, {value: 5, label: 'Very High'
+                            }, {value: 6, label: 'Extra High'
+                            }]
+                    },{
+                        name:"执行时间约束",
+                        val:"",
+                        vals:[
+                            {value: 1, label: 'Normal'
+                            }, {value: 2, label: 'High'
+                            }, {value: 3, label: 'Very High'
+                            }, {value: 4, label: 'Extra High'
+                            }]
+                    },{
+                        name:"要求的开发进度",
+                        val:"",
+                        vals:[
+                            {value: 1, label: 'Very Low'
+                            }, {value: 2, label: 'Low'
+                            }, {value: 3, label: 'Normal'
+                            }, {value: 4, label: 'High'
+                            }, {value: 5, label: 'Very High'
+                            }]
+                    }
+                ],
+                inputs:[
+                    {
+                        name:"生产率",
+                        val:"",
+                        unit:"小时／FP",
+                        place:'10-30'
+                    },{
+                        name:"人力成本",
+                        val:"",
+                        unit:"元／人月",
+                        place:"请输入内容"
+                    }
+                ],
+            };
+        }
+    }
 </script>
 
 

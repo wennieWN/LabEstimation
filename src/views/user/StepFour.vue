@@ -25,6 +25,12 @@
             </el-row>
         </div>
         <Body_IFPUGReport class="pdf-dom" id="pdfDom"></Body_IFPUGReport>
+        <div>
+            <el-row></el-row>
+            <el-row style="text-align: center">
+                <el-button type="primary" v-on:click="toReport" >返回</el-button>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -96,6 +102,9 @@
             },
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
+            },
+            toReport(){
+                this.$router.push( {path:'/ver'});
             }
         }
     };

@@ -64,7 +64,7 @@
                     projectDescription: '',
                     projectLeader: '',
                     projectContact: '',
-                    estimationMethoc: 'IFPUG/COSMIC'
+                    estimationMethod: 'IFPUG/COSMIC'
                 },
                 msg: 'Welcome to Your Vue.js App'
             }
