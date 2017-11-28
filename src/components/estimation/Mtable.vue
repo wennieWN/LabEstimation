@@ -18,7 +18,7 @@
           <el-table-column label="操作" width="218">
             <template slot-scope="scope">
               <!-- <el-button type="text" size="small" @click="edit(scope.$index, scope.row)">编辑</el-button>-->
-               <el-button type="text" size="small" @click.native.prevent="goReport">查看报告</el-button>
+               <el-button type="text" size="small" @click.native.prevent="goReport(scope.$index)">查看报告</el-button>
                <el-button type="text" size="small" @click.native.prevent="goEst(scope.$index)">估算</el-button>
              </template>
            </el-table-column>
@@ -54,7 +54,8 @@
           indexMethod(index) {
             return index +1;
           },
-           goReport:function () {
+           goReport:function (index) {
+                global_.ID = this.tableData4[index].rId;
              this.$router.push( {path:'/managerIFPUGreport'})
           },
            goEst(index) {

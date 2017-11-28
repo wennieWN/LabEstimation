@@ -23,7 +23,7 @@
               <template slot-scope="scope">
                 <el-button @click.native.prevent="deleteRow(scope.$index, tableData4)" type="text" size="small">移除</el-button>
                 <el-button @click.native.prevent="modify(scope.$index)" type="text" size="small">修改</el-button>
-                <el-button type="text" size="small" @click.native.prevent="goReport">查看报告</el-button>
+                <el-button type="text" size="small" @click.native.prevent="goReport(scope.$index)">查看报告</el-button>
               </template>
             </el-table-column>
             <el-table-column prop="remark" label="备注" width="200"></el-table-column>
@@ -61,7 +61,8 @@
   export default {
     name:'ReportTable',
     methods: {
-          goReport:function () {
+          goReport:function (index) {
+              global_.ID=this.tableData4[index].rId
             this.$router.push( {path:'/stepfour'})
           },
 //        formDate : function() {

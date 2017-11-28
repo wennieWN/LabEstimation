@@ -249,7 +249,7 @@
 
       // 计算属性的 getter
       ilfSets: function () {
-        var set = this.ilfStr.split(' ')
+        var set = this.ilfStr.trim().split(' ')
         var jsonArray = []
 
         for (var i = 0; i < set.length; i++) {
@@ -260,7 +260,7 @@
       },
 
       eifSets: function () {
-        var set = this.eifStr.split(' ')
+        var set = this.eifStr.trim().split(' ')
         var jsonArray = []
 
         for (var i = 0; i < set.length; i++) {
@@ -775,7 +775,7 @@
           ///// Expanding all tree nodes
           expandTree() {
             for (var i = 0; i < this.childNodes.length; i++) {
-              if (this.childNodes[i].childNodes.length > 0) {
+              if (this.childNodes[i].type==='folder') {
                 this.expandSubtree(this.childNodes[i]);
               }
             }
@@ -785,7 +785,7 @@
           expandSubtree(p_node) {
             this.expandNode(p_node);
             for (var i = 0; i < p_node.childNodes.length; i++) {
-              if (p_node.childNodes[i].childNodes.length > 0) {
+              if (p_node.childNodes[i].type==='folder') {
                 this.expandSubtree(p_node.childNodes[i]);
               }
             }
@@ -793,7 +793,7 @@
           ///// Collapsing all tree nodes
           collapseTree() {
             for (var i = 0; i < this.childNodes.length; i++) {
-              if (this.childNodes[i].childNodes.length > 0) {
+              if (this.childNodes[i].type==='folder') {
                 this.collapseSubtree(this.childNodes[i]);
               }
             }
@@ -803,7 +803,7 @@
           collapseSubtree(p_node) {
             this.collapseNode(p_node);
             for (var i = 0; i < p_node.childNodes.length; i++) {
-              if (p_node.childNodes[i].childNodes.length > 0) {
+              if (p_node.childNodes[i].type==='folder') {
                 this.collapseSubtree(p_node.childNodes[i]);
               }
             }
@@ -1340,7 +1340,7 @@
           'context1': {
             elements: [
               {
-                text: 'Tree Actions',
+                text: '隐藏／展开操作',
                 icon: 'el-icon-close',
                 action: function (node) {
 
@@ -1348,35 +1348,35 @@
                 submenu: {
                   elements: [
                     {
-                      text: 'Toggle Node',
+                      text: '隐藏／展开节点',
                       icon: 'menu_img el-icon-d-caret',
                       action: function (vue,node) {
                         node.toggleNode(vue);
                       }
                     },
                     {
-                      text: 'Expand Node',
+                      text: '展开节点',
                       icon: 'menu_img el-icon-arrow-down',
                       action: function (vue,node) {
                         node.expandNode(vue);
                       }
                     },
                     {
-                      text: 'Collapse Node',
+                      text: '隐藏节点',
                       icon: 'menu_img el-icon-arrow-right',
                       action: function (vue,node) {
                         node.collapseNode(vue);
                       }
                     },
                     {
-                      text: 'Expand Subtree',
+                      text: '展开子树',
                       icon: 'menu_img el-icon-arrow-down',
                       action: function (vue,node) {
                         node.expandSubtree(vue);
                       }
                     },
                     {
-                      text: 'Collapse Subtree',
+                      text: '隐藏子树',
                       icon: 'menu_img el-icon-arrow-right',
                       action: function (vue,node) {
                         node.collapseSubtree(vue);
@@ -1387,7 +1387,7 @@
                 }
               },
               {
-                text: 'Node Actions',
+                text: '节点操作',
                 icon: 'el-icon-close',
                 action: function (node) {
 
@@ -1395,7 +1395,7 @@
                 submenu: {
                   elements: [
                     {
-                      text: 'Add File',
+                      text: '添加子文件',
                       icon: 'menu_img el-icon-plus',
                       action: function (vue, node) {
 
@@ -1409,7 +1409,7 @@
                           return;
                         }
 
-                        vue.$prompt('Enter the file name', '提示', {
+                        vue.$prompt('输入名称', '提示', {
                           confirmButtonText: '确定',
                           cancelButtonText: '取消',
                         }).then(({value}) => {
@@ -1428,7 +1428,7 @@
                             "name" : tempNode.text,
                             "tree" : temp
                           }
-                          console.log(Msg)
+                          //console.log(Msg)
 
                           vue.$http.post('http://192.168.1.122:8011/estimation/addFile/' + global_.ID, Msg).then(res => {
                             //alert("success")
@@ -1456,7 +1456,7 @@
                       }
                     },
                     {
-                      text: 'Add Folder',
+                      text: '添加子文件夹',
                       icon: 'menu_img el-icon-plus',
                       action: function (vue, node) {
 
@@ -1471,7 +1471,7 @@
                         }
 
 
-                        vue.$prompt('Enter the folder name', '提示', {
+                        vue.$prompt('输入名称', '提示', {
                           confirmButtonText: '确定',
                           cancelButtonText: '取消',
                         }).then(({value}) => {
@@ -1521,7 +1521,7 @@
                     },
 
                     {
-                      text: 'Delete Child Nodes',
+                      text: '删除子节点',
                       icon: 'menu_img el-icon-close',
                       action: function (vue,node) {
 
@@ -1581,7 +1581,7 @@
                       }
                     },
                     {
-                      text: 'Delete Node',
+                      text: '删除节点',
                       icon: 'menu_img el-icon-close',
                       action: function (vue, node) {
 
@@ -1651,7 +1651,7 @@
                       }
                     },
                     {
-                      text: 'Create Sibling File',
+                      text: '新建兄弟节点文件',
                       icon: 'menu_img el-icon-plus',
                       action: function (vue, node) {
 //                        if(node.type=='file'){
@@ -1718,7 +1718,7 @@
                     },
 
                     {
-                      text: 'Create Sibling Folder',
+                      text: '新建兄弟节点文件夹',
                       icon: 'menu_img el-icon-plus',
                       action: function (vue, node) {
 
@@ -1772,7 +1772,7 @@
                       }
                     },
                     {
-                      text: 'cut Node',
+                      text: '剪切节点',
                       icon: 'menu_img el-icon-minus',
                       action: function (vue, node) {
 
@@ -1824,7 +1824,7 @@
                       }
                     },
                     {
-                      text: 'Paste Node',
+                      text: '粘贴节点',
                       icon: 'menu_img el-icon-close',
                       action: function (vue, node) {
 
@@ -1886,7 +1886,7 @@
 
                     },
                     {
-                      text: 'Rename Node',
+                      text: '节点重命名',
                       icon: 'menu_img el-icon-edit',
                       action: function (vue, node) {
 
@@ -2328,7 +2328,7 @@
   }
 
   .menu {
-    width: 175px;
+    width: 190px;
     position: absolute;
     background: #F1F1F1;
     -webkit-user-select: none; /* Chrome/Safari */
@@ -2341,7 +2341,7 @@
   .sub-menu {
     display: none;
     position: absolute;
-    min-width: 175px;
+    min-width: 190px;
     box-shadow: 2px 2px 3px #BDBDBD;
   }
 

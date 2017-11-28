@@ -6,17 +6,18 @@
         <el-row style="margin-bottom: 0">
             <el-col :span="22"><div class="grid-content bg-white"></div></el-col>
             <el-col :span="2"><div class="grid-content bg-white">
-                <el-button type="text" v-on:click="editDialogVisible = true">编辑</el-button>
+                <!--<el-button type="text" v-on:click="editDialogVisible = true">编辑</el-button>-->
+                <el-button type="text" v-on:click="toManagerStepThree">编辑</el-button>
             </div></el-col>
         </el-row>
-        <!--编辑弹出框-->
-        <el-dialog title="编辑调整因子" :visible.sync="editDialogVisible" width="30%" :before-close="handleClose">
-            <Body_EditIFPUGFactor @transferUser = "getMsg"></Body_EditIFPUGFactor>
-            <span slot="footer" class="dialog-footer">
-                   <el-button @click="closeEdition">取 消</el-button>
-                   <el-button type="primary" @click="submitEdition">提交</el-button>
-                </span>
-        </el-dialog>
+        <!--&lt;!&ndash;编辑弹出框&ndash;&gt;-->
+        <!--<el-dialog title="编辑调整因子" :visible.sync="editDialogVisible" width="30%" :before-close="handleClose">-->
+            <!--<Body_EditIFPUGFactor @transferUser = "getMsg"></Body_EditIFPUGFactor>-->
+            <!--<span slot="footer" class="dialog-footer">-->
+                   <!--<el-button @click="closeEdition">取 消</el-button>-->
+                   <!--<el-button type="primary" @click="submitEdition">提交</el-button>-->
+                <!--</span>-->
+        <!--</el-dialog>-->
 
         <hr class="style-two" width=100% style="margin-top: 0">
         <el-row></el-row>
@@ -43,8 +44,8 @@
             <el-form :model="form">
                 <el-form-item label="修改状态" :label-width="formLabelWidth">
                     <el-select v-model="form.state" placeholder="请选择状态">
-                        <el-option label="待修改" value="modification"></el-option>
-                        <el-option label="完成" value="success"></el-option>
+                        <el-option label="待修改" value="待修改"></el-option>
+                        <el-option label="完成" value="完成"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="备注" :label-width="formLabelWidth">
@@ -76,18 +77,18 @@
 
 <script>
     import global_ from "../../Global.vue"
-    import Body_EditIFPUGFactor from "./Body_EditIFPUGFactor.vue"
+//    import Body_EditIFPUGFactor from "./Body_EditIFPUGFactor.vue"
 
     export default {
         name: 'Body_CheckIFPUGFactor',
-        components: {
-            Body_EditIFPUGFactor
-        },
+//        components: {
+//            Body_EditIFPUGFactor
+//        },
         methods: {
             init(){
                 this.$http.get('http://192.168.1.122:8011/estimation/getRequirement/'+global_.ID).then(res=>{
                     console.log(res.body.vaf);
-                    trans=response.body.vaf;
+                    var trans=res.body.vaf;
                     this.displays[0].items[0].value=trans.developmentType;
                     this.displays[0].items[1].value=trans.rely;
                     this.displays[1].items[0].value=trans.developmentPlatform;
@@ -102,36 +103,36 @@
                     console.log('fail');
                 })
             },
-            closeEdition() {
-                this.$confirm('返回前页将不会保存当前内容, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning',
-                    center: true
-                }).then(() => {
-                    this.dialogVisible=false
-                    this.$message({
-                        type: 'success',
-                        message: '已取消编辑'
-                    });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消操作'
-                    });
-                });
-            },
-            submitEdition() {
-                this.editDialogVisible=false;
-                this.init();
-            },
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(_ => {
-                        done();
-                    })
-                    .catch(_ => {});
-            },
+//            closeEdition() {
+//                this.$confirm('返回前页将不会保存当前内容, 是否继续?', '提示', {
+//                    confirmButtonText: '确定',
+//                    cancelButtonText: '取消',
+//                    type: 'warning',
+//                    center: true
+//                }).then(() => {
+//                    this.dialogVisible=false
+//                    this.$message({
+//                        type: 'success',
+//                        message: '已取消编辑'
+//                    });
+//                }).catch(() => {
+//                    this.$message({
+//                        type: 'info',
+//                        message: '已取消操作'
+//                    });
+//                });
+//            },
+//            submitEdition() {
+//                this.editDialogVisible=false;
+//                this.init();
+//            },
+//            handleClose(done) {
+//                this.$confirm('确认关闭？')
+//                    .then(_ => {
+//                        done();
+//                    })
+//                    .catch(_ => {});
+//            },
             toMVER() {
                 this.$confirm('是否返回前页', '提示', {
                     confirmButtonText: '确定',
@@ -143,7 +144,7 @@
                         type: 'success',
                         message: '返回前页!'
                     });
-                    this.$router.push({path:'/managerstepone'})
+                    this.$router.push({path:'/mver'})
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -151,18 +152,28 @@
                     });
                 });
             },
+            toManagerStepThree(){
+                this.$router.push({path:'/managerstepthree'});
+            },
             Submit(){
-                this.$http.get('http://192.168.1.122:8011/estimation/getRequirement/'+global_.ID).then(res=>{
+                var trans={
+                    "state": this.form.state,
+                    "remark": this.form.desc
+                }
 
-                },res=>{
-                    console.log('fail');
-                });
+                console.log(global_.ID)
+                this.$http.post('http://192.168.1.122:8011/estimation/changeState/' + global_.ID, trans).then(response => {
+                    this.$message({
+                        type: 'success',
+                        message: '已提交当前信息!'
+                    });
+                })
                 this.$router.push({path:'/mver'});
                 this.dialogFormVisible = false;
             },
-            getMsg(data) { //msg就是从子组件传递过来的参数msg
-                console.log(data);
-            }
+//            getMsg(data) { //msg就是从子组件传递过来的参数msg
+//                console.log(data);
+//            }
         },
         data() {
             return {
@@ -236,7 +247,7 @@
     .container {
         font-size: 13px;
         font-family: 'Microsoft YaHei';
-        width: 80%;
+        width: 64%;
         height: auto;
         margin: auto;
         padding: 50px 0 40px 0;

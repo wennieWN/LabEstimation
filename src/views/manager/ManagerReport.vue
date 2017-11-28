@@ -25,19 +25,25 @@
             </el-row>
         </div>
 
-        <Body_ViewIFPUGReport class="pdf-dom" id="pdfDom"></Body_ViewIFPUGReport>
+        <Body_IFPUGReport class="pdf-dom" id="pdfDom"></Body_IFPUGReport>
+        <div>
+            <el-row></el-row>
+            <el-row style="text-align: center">
+                <el-button type="primary" v-on:click="toReport" >返回</el-button>
+            </el-row>
+        </div>
     </div>
 </template>
 
 <script>
     import Head2 from "../../components/Head2.vue"
-    import Body_ViewIFPUGReport from "../../components/estimation/Body_ViewIFPUGReport"
-    import  '../../components/js/html2canvas.js'
-    //import JsPDF from '../../components/js/jsPdf.debug.js'
+    import Body_IFPUGReport from "../../components/estimation/Body_IFPUGReport"
+    import html2Canvas from '../../components/js/html2canvas.js'
+    import JsPDF from '../../components/js/jsPdf.debug.js'
     export default {
         name: "ManagerIFPUGReport",
         components: {
-            Head2,Body_ViewIFPUGReport
+            Head2,Body_IFPUGReport
         },
         data() {
             return {
@@ -97,6 +103,9 @@
             },
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
+            },
+            toReport(){
+                this.$router.push( {path:'/mver'});
             }
         }
     };

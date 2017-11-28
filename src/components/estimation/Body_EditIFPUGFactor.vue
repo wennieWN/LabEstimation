@@ -1,7 +1,17 @@
 <!--管理员编辑IFPUG调整因子-->
   <template>
     <div class="container">
+      <!--编辑按钮-->
+      <el-row style="margin-bottom: 0">
+        <el-col :span="22"><div class="grid-content bg-white"></div></el-col>
+        <el-col :span="2"><div class="grid-content bg-white">
+          <!--<el-button type="text" v-on:click="editDialogVisible = true">编辑</el-button>-->
+          <el-button type="text" disabled="">编辑</el-button>
+        </div></el-col>
+      </el-row>
 
+      <hr class="style-two" width=100% style="margin-top: 0">
+      <el-row></el-row>
       <!--开发类型、开发平台、开发语言、是否使用数据库-->
       <div v-for="radio in radios" :key="radio.name">
         <el-row :gutter="20">
@@ -60,8 +70,9 @@
         <el-col :span="6"><div class="grid-content bg-white"></div></el-col>
        <el-col :span="6">
           <div class="grid-content bg-white">
+            <el-button type="primary" @click="toManagerStepTwo" style="margin: auto;">返回</el-button>
             <el-button  @click="Next">保存</el-button>
-            <el-button  @click="sendMessage">传值</el-button>
+            <!--<el-button  @click="sendMessage">传值</el-button>-->
           </div>
         </el-col>
         <el-col :span="6"><div class="grid-content bg-white"></div></el-col>
@@ -75,16 +86,83 @@
     import global_ from "../../Global.vue"
 //    import Body_CheckIFPUGFactor from "./Body_CheckIFPUGFactor.vue"
 
+    //数据个数
+    var dataNum=10;
+    //记录原始数据
+    var originalData=[];
+    //记录数据改动状态，0未变，1变，初始化置0
+    var changedDataState=[];
+    for(var i=0;i<dataNum;i++){
+        changedDataState[i]=0;
+    }
+
     export default {
         name: 'Body_EditIFPUGFactor',
 //        components:{
 //            Body_CheckIFPUGFactor
 //        },
         methods: {
-            sendMessage(event) {
-                this.$emit("tansferUser","hhhhh");
+//            sendMessage(event) {
+//                this.$emit("tansferUser","hhhhh");
+//            },
+
+            //作用：记录数据库传过来的数据
+            //被调用：mounted函数中，数据传过来后
+            saveOriginalData(){
+               for(var i=0;i<dataNum;i++) {
+                   if(i<4){
+                       originalData[i]=this.radios[i].val;
+                   }
+                   else if(i>=4&&i<8){
+                       originalData[i]=this.selections[i-4].val;
+                   }
+                   else if(i>=8&&i<10){
+                       originalData[i]=this.inputs[i-8].val;
+                   }
+
+               }
+            },
+
+            //作用：比对当前数据和原始数据，标志修改过的数据，即state置1
+            //被调用：Next函数中，数据传过去前
+            setDataState(){
+                for(var i=0;i<dataNum;i++) {
+                    if(i<4){
+                        if(originalData[i]!==this.radios[i].val) changedDataState[i]=1;
+                    }
+                    else if(i>=4&&i<8){
+                        if(originalData[i]!==this.selections[i-4].val) changedDataState[i]=1;
+                    }
+                    else if(i>=8&&i<10){
+                        if(originalData[i]!==this.inputs[i-8].val) changedDataState[i]=1;
+                    }
+
+                }
+            },
+
+
+            toManagerStepTwo(){
+                this.$confirm('是否返回前页', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    center: true
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '返回前页!'
+                    });
+                    this.$router.push({path:'/managersteptwo'})
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消操作'
+                    });
+                });
             },
             Next() {
+                //标志修改过的数据
+                this.setDataState();
                 var trans = {
                     "developmentType": this.radios[0].val,
                     "developmentPlatform": this.radios[1].val,
@@ -95,9 +173,25 @@
                     "TIME": this.selections[2].val,
                     "SCED": this.selections[3].val,
                     "productivity": this.inputs[0].val,
-                    "cost": this.inputs[1].val
+                    "cost": this.inputs[1].val,
+                    "developmentTypeState": changedDataState[0],
+                    "developmentPlatformState": changedDataState[1],
+                    "languageTypeState": changedDataState[2],
+                    "DBMS_UsedState": changedDataState[3],
+                    "RELYState": changedDataState[4],
+                    "CPLXState": changedDataState[5],
+                    "TIMEState": changedDataState[6],
+                    "SCEDState": changedDataState[7],
+                    "productivityState": changedDataState[8],
+                    "costState": changedDataState[9],
                 };
+
+                console.log("showDataState:");
+                console.log(changedDataState);
+
+                console.log("showTransData:");
                 console.log(trans);
+
                 this.$confirm('是否提交当前信息, 进入下一步骤?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -109,7 +203,9 @@
                             type: 'success',
                             message: '已提交当前信息!'
                         });
-                    })
+                    });
+                    for(var i=0;i<1000000;i++){}
+                    this.$router.push({path:'/managersteptwo'})
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -215,18 +311,41 @@
         },
 
         mounted(){
+//            //测试：模拟数据库数据
+//            this.radios[0].val = "Enhencement";
+//            this.radios[1].val = "Personal computer";
+//            this.radios[2].val = "4GL";
+//            this.radios[3].val = "No";
+//            this.selections[0].val = 'Normal';
+//            this.selections[1].val = 'Very Low';
+//            this.selections[2].val = 'High';
+//            this.selections[3].val = 'Very High';
+//            this.inputs[0].val = 10;
+//            this.inputs[1].val = 20;
+//
+//            //记录数据库传过来的数据
+//            this.saveOriginalData();
+//            console.log("showOriginalData");
+//            console.log(originalData);
+
             this.$http.get('http://192.168.1.122:8011/estimation/getRequirement/'+global_.ID).then(res=>{
                 console.log(res.body.vaf);
-                this.radios[0].val = res.body.vaf.developmentType
-                this.radios[1].val = res.body.vaf.developmentPlatform
-                this.radios[2].val = res.body.vaf.languageType
-                this.radios[3].val = res.body.vaf.dbms_Used
-                this.selections[0].val = res.body.vaf.rely
-                this.selections[1].val = res.body.vaf.cplx
-                this.selections[2].val = res.body.vaf.time
-                this.selections[3].val = res.body.vaf.sced
-                this.inputs[0].val = res.body.vaf.productivity
-                this.inputs[1].val = res.body.vaf.cost
+                this.radios[0].val = res.body.vaf.developmentType;
+                this.radios[1].val = res.body.vaf.developmentPlatform;
+                this.radios[2].val = res.body.vaf.languageType;
+                this.radios[3].val = res.body.vaf.dbms_Used;
+                this.selections[0].val = res.body.vaf.rely;
+                this.selections[1].val = res.body.vaf.cplx;
+                this.selections[2].val = res.body.vaf.time;
+                this.selections[3].val = res.body.vaf.sced;
+                this.inputs[0].val = res.body.vaf.productivity;
+                this.inputs[1].val = res.body.vaf.cost;
+
+                //记录数据库传过来的数据
+                this.saveOriginalData();
+                console.log("showOriginalData");
+                console.log(originalData);
+
             },res=>{
                 console.log('fail');
             })
@@ -276,5 +395,10 @@
   .row-bg {
     padding: 10px 0;
     background-color: #FFFFFF;
+  }
+  hr.style-two {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
   }
 </style>
